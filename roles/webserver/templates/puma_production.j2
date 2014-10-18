@@ -1,5 +1,7 @@
 # config/puma.rb
+# the min and max no. of threads per worker
 threads 1, 6
+#ideally the number of cores
 workers 2
 
 on_worker_boot do

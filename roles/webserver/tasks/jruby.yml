@@ -34,6 +34,10 @@
   template: src=jruby_env_vars.j2 dest=/etc/environment mode=544
   tags: jruby
 
+- name: add jruby to path for sudo
+  template: src=jruby_env_vars.j2 dest=/etc/profile.d/jruby_envs.sh mode=744
+  tags: jruby
+
 - name: update ruby gems
   command: sudo -i gem update --system
   tags: jruby
