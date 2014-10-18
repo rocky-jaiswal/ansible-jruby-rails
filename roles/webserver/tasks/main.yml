@@ -1,0 +1,5 @@
+- include: jruby.yml tags=jruby
+- include: node.yml tags=node
+- include: deploy.yml tags=deploy
+- include: puma.yml tags=puma
+- include: nginx.yml tags=nginx

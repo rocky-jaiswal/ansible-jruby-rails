@@ -1,0 +1,47 @@
+---
+# JRuby
+- name: upgrade
+  action: apt update_cache=yes upgrade=yes
+
+- name: install jruby dependencies
+  action: apt pkg={{item}} state=installed
+  with_items:
+    - openjdk-7-jdk
+
+- name: uninstall system ruby
+  apt: name=ruby state=absent
+
+# Install JRuby
+- name: ensure directory temporary jruby download directory is present
+  file: state=directory path={{jrubyDir}}
+  tags: jruby
+
+- name: download jruby
+  get_url: url={{jrubyUrl}} dest={{jrubyTmpDir}} force=no
+  tags: jruby
+
+- name: ensure jruby is extracted
+  command: tar -xf {{jrubyTmpDir}}/{{jrubyCompressedFile}} -C {{jrubyDir}}
+  sudo: yes
+  tags: jruby
+
+- name: soft link
+  file: src={{jrubyDir}}/jruby-1.7.16 dest={{jrubyDir}}/jruby state=link
+  sudo: yes
+  tags: jruby
+
+- name: add jruby to path for everyone
+  template: src=jruby_env_vars.j2 dest=/etc/environment mode=544
+  tags: jruby
+
+- name: update ruby gems
+  command: sudo -i gem update --system
+  tags: jruby
+
+- name: Install Bundler
+  command: sudo -i gem install bundler
+  tags: jruby
+
+- name: Install compass
+  command: sudo -i gem install compass
+  tags: jruby
